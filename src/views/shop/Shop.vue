@@ -14,7 +14,7 @@
             </div>
         </div>
         <!--v-show="item.imgURL get rid of the flashing img reaction. IT means only the img has been loaded, the shopInfo will be present. -->
-        <ShopInfo :item="item" :hideBorder="true" />
+        <ShopInfo :item="item" :hideBorder="true" v-show="item.imgUrl" />
     </div>
     <Content />
     <Cart />
@@ -31,13 +31,12 @@ import { reactive, toRefs } from "vue";
 const useShopInfoEffect = () => {
     // console.log(route.name, route.params);// shop {id:1},这个ID是在router里面developer写入的
     const route = useRoute();
-    console.log(route.params.id);
     const data = reactive({ item: {} });
     // console.log(route.params.id);
     const getItemData = async () => {
         const result = await get(`api/shop/:${route.params.id}`);
-        console.log(result);
         if (result?.errno === 0 && result?.data) {
+            // result.data为api自带的结构中shop需要的信息。
             data.item = result.data;
         }
     };

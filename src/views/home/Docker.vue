@@ -5,8 +5,10 @@
             :key="index"
             :class="{ docker__item: true, 'docker__item--active': index === 0 }"
         >
-            <div class="docker__icon iconfont" :class="item.icon"></div>
-            <div class="docker__title">{{ item.text }}</div>
+            <router-link :to="item.to" class="docker__item">
+                <div class="docker__icon iconfont" :class="item.icon"></div>
+                <div class="docker__title">{{ item.text }}</div>
+            </router-link>
         </div>
     </div>
 </template>
@@ -15,10 +17,14 @@ export default {
     name: "Docker",
     setup() {
         const dockerList = [
-            { icon: "icon-home-fill", text: "home" },
-            { icon: "icon-cart-full-fill", text: "Cart" },
-            { icon: "icon-order-fill", text: "Order" },
-            { icon: "icon-account-fill", text: "Me" },
+            { icon: "icon-home-fill", text: "home", to: { name: "Home" } },
+            {
+                icon: "icon-cart-full-fill",
+                text: "Cart",
+                to: { name: "CartList" },
+            },
+            { icon: "icon-order-fill", text: "Order", to: { name: "Home" } },
+            { icon: "icon-account-fill", text: "Me", to: { name: "Home" } },
         ];
         return { dockerList };
     },
@@ -40,7 +46,10 @@ export default {
     height: 4.9rem;
     border-top: 0.1rem solid $content-bg;
     color: $content-font-color;
-
+    a {
+        text-decoration: none;
+        color: $content-font-color;
+    }
     &__item {
         flex: 1;
         display: flex;
@@ -49,7 +58,8 @@ export default {
         align-items: center;
         background-color: $bgColor;
         text-align: center;
-        &--active {
+
+        &--active a {
             color: $priamry;
         }
     }

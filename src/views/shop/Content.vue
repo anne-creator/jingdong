@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 <template>
     <div class="content">
         <div class="category">
@@ -10,20 +9,9 @@
             >
                 {{ item.name }}
             </div>
-            <!--
-            <div class="category__item">秒杀</div>
-            <div class="category__item">新鲜水果</div> 
-            <div class="category__item">休闲食品</div>
-            <div class="category__item">时令蔬菜</div>
-            <div class="category__item">肉蛋家禽</div>
-            -->
         </div>
         <div class="product">
-            <div
-                class="product__item"
-                v-for="item in contentList"
-                :key="item._id"
-            >
+            <div class="product__item" v-for="item in list" :key="item._id">
                 <img class="product__item__img" :src="item.imgUrl" />
                 <div class="product__item__detail">
                     <h4 class="product__item__title">
@@ -43,17 +31,31 @@
                         class="product__number__minus"
                         @click="
                             () => {
-                                changeCartItemInfo(shopId, item._id, item, -1);
+                                changeCartItemInfo(
+                                    shopId,
+                                    item.name,
+                                    item._id,
+                                    item,
+                                    -1
+                                );
                             }
                         "
                         >-</span
                     >
-                    {{ cartList?.[shopId]?.[item._id]?.count || 0 }}
+                    {{
+                        cartList?.[shopId]?.productList?.[item._id]?.count || 0
+                    }}
                     <span
                         class="product__number__plus"
                         @click="
                             () => {
-                                changeCartItemInfo(shopId, item._id, item, 1);
+                                changeCartItemInfo(
+                                    shopId,
+                                    shopName,
+                                    item._id,
+                                    item,
+                                    1
+                                );
                             }
                         "
                         >+</span
@@ -67,7 +69,7 @@
 import { get } from "../../utils/request";
 import { reactive, toRefs, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
-import { useStore } from "vuex";
+import { useCommonCartEffect } from "./commonCartEffect.js";
 
 // /api/shop/${shopId}/products
 
@@ -76,6 +78,7 @@ const categories = [
     { name: "秒杀", tab: "seckill" },
     { name: "新鲜水果", tab: "fruit" },
 ];
+
 const useTabEffect = () => {
     const curTab = ref(categories[0].tab);
     const handleTabClick = (tab) => {
@@ -83,42 +86,26 @@ const useTabEffect = () => {
     };
     return { curTab, handleTabClick };
 };
-const useContentEffect = (curTab, shopId) => {
+
+const useContentListEffect = (curTab, shopId) => {
     // content list that will be showned
-    const data = reactive({ contentList: [] });
+    const content = reactive({ list: [] });
     // only get the data from tab page
     const getContentData = async () => {
-        // get content data from api
+        // get content data from api: 两个参数，一个地址，一个tab
         const result = await get(`/api/shop/${shopId}/products`, {
             tab: curTab.value,
         });
         if (result?.errno === 0 && result?.data.length) {
-            // store content data to contentList and show the list on the page using v-for
-            data.contentList = result.data;
+            // store content data to list and show the list on the page using v-for
+            content.list = result.data;
         }
     };
     watchEffect(() => {
         getContentData();
     });
-    const { contentList } = toRefs(data);
-    return { contentList };
-};
-
-// * * cart related methods
-const useCartEffect = () => {
-    // get cartList from vuex
-    const store = useStore();
-    const { cartList } = toRefs(store.state);
-    const addItemToCart = (shopId, productId, productInfo) => {
-        // commite addItemToCart method with some params as the second params of the commite method
-        store.commit("changeCartItemInfo", {
-            shopId,
-            productId,
-            productInfo,
-            num,
-        });
-    };
-    return { cartList, addItemToCart };
+    const { list } = toRefs(content);
+    return { list, shopId };
 };
 
 export default {
@@ -127,16 +114,16 @@ export default {
         const route = useRoute();
         const shopId = route.params.id;
         const { curTab, handleTabClick } = useTabEffect();
-        const { contentList } = useContentEffect(curTab);
-        const { cartList, changeCartItemInfo } = useCartEffect();
+        const { list } = useContentListEffect(curTab, shopId);
+        const { cartList, changeCartItemInfo } = useCommonCartEffect();
         return {
-            contentList,
+            list,
             curTab,
             handleTabClick,
             categories,
-            shopId,
             changeCartItemInfo,
             cartList,
+            shopId,
         };
     },
 };

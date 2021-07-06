@@ -8,6 +8,7 @@
             :key="item._id"
             :to="`/Shop/${item._id}`"
         >
+            <!-- 传递数据 ：item=“item” 子组件用props接受数据-->
             <ShopInfo :item="item" />
         </router-link>
     </div>

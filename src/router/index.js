@@ -40,6 +40,30 @@ const routes = [
         component: () =>
             import(/* webpackChunkName: "Shop" */ "../views/shop/Shop"),
     },
+    {
+        // 跳到对应id的页面
+        path: "/CartList",
+        name: "CartList",
+        component: () =>
+            import(/* webpackChunkName: "Cart" */ "../views/cartList/CartList"),
+    },
+    // {
+    //     // 跳到对应id的页面
+    //     path: "/orderConfirmation/:id",
+    //     name: "OrderConfirmation",
+    //     component: () =>
+    //         import(
+    //             /* webpackChunkName: "OrderConfirmation" */ "../views/orderConfirmation/OrderConfirmation"
+    //         ),
+    // },
+    {
+        path: "/orderConfirmation/:id",
+        name: "OrderConfirmation",
+        component: () =>
+            import(
+                /* webpackChunkName: "orderConfirmation" */ "../views/orderConfirmation/OrderConfirmation"
+            ),
+    },
 ];
 
 const router = createRouter({
