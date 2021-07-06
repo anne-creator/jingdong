@@ -33,7 +33,7 @@
                             () => {
                                 changeCartItemInfo(
                                     shopId,
-                                    item.name,
+                                    shopName,
                                     item._id,
                                     item,
                                     -1
@@ -69,7 +69,7 @@
 import { get } from "../../utils/request";
 import { reactive, toRefs, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
-import { useCommonCartEffect } from "./commonCartEffect.js";
+import { useCommonCartEffect } from "../../effect/cartEffect";
 
 // /api/shop/${shopId}/products
 
@@ -110,12 +110,13 @@ const useContentListEffect = (curTab, shopId) => {
 
 export default {
     name: "Content",
+    props: ["shopName"],
     setup() {
         const route = useRoute();
         const shopId = route.params.id;
         const { curTab, handleTabClick } = useTabEffect();
         const { list } = useContentListEffect(curTab, shopId);
-        const { cartList, changeCartItemInfo } = useCommonCartEffect();
+        const { cartList, changeCartItemInfo } = useCommonCartEffect(shopId);
         return {
             list,
             curTab,

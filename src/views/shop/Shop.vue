@@ -16,7 +16,7 @@
         <!--v-show="item.imgURL get rid of the flashing img reaction. IT means only the img has been loaded, the shopInfo will be present. -->
         <ShopInfo :item="item" :hideBorder="true" v-show="item.imgUrl" />
     </div>
-    <Content />
+    <Content :shopName="item.name" />
     <Cart />
 </template>
 <script>

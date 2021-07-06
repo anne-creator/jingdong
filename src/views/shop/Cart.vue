@@ -132,14 +132,13 @@
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { computed, ref } from "vue";
-import { useCommonCartEffect } from "./commonCartEffect";
+import { useCommonCartEffect } from "../../effect/cartEffect";
 
 const useCartEffect = (shopId) => {
-    const { cartList, changeCartItemInfo } = useCommonCartEffect();
+    const { productList, changeCartItemInfo } = useCommonCartEffect(shopId);
     const store = useStore();
     // const cartList = store.state.cartList;
     const calculations = computed(() => {
-        const productList = cartList[shopId]?.productList;
         const result = { total: 0, price: 0, allChecked: true };
         if (productList) {
             for (let i in productList) {
@@ -165,50 +164,6 @@ const useCartEffect = (shopId) => {
         }
         return result;
     });
-
-    // const total = computed(() => {
-    //     const productList = cartList[shopId]?.productList;
-    //     let count = 0;
-    //     if (productList) {
-    //         for (let i in productList) {
-    //             const product = productList[i];
-    //             count += product.count;
-    //         }
-    //     }
-    //     return count;
-    // });
-
-    // const price = computed(() => {
-    //     const productList = cartList[shopId]?.productList;
-    //     let count = 0;
-    //     if (productList) {
-    //         for (let i in productList) {
-    //             const product = productList[i];
-    //             if (product.check) {
-    //                 count += product.count * product.price;
-    //             }
-    //         }
-    //     }
-    //     return count.toFixed(2);
-    // });
-
-    const productList = computed(() => {
-        const productList = cartList[shopId]?.productList || [];
-        return productList;
-    });
-
-    // let allChecked = computed(() => {
-    //     const productList = cartList[shopId]?.productList;
-    //     let result = true;
-    //     if (productList) {
-    //         for (let key in productList) {
-    //             if (productList[key].count > 0 && !productList[key].check) {
-    //                 result = false;
-    //             }
-    //         }
-    //     }
-    //     return result;
-    // });
 
     function changeSelectAllCheckedState(shopId, allChecked) {
         store.commit("changeSelectAllCheckedState", { shopId, allChecked });
@@ -436,6 +391,7 @@ export default {
     }
     a {
         text-decoration: none;
+        color: $bgColor;
     }
     &__btn {
         width: 9.8rem;
