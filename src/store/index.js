@@ -4,12 +4,10 @@ const setLocalCartList = (state) => {
     const cartListString = JSON.stringify(cartList);
     localStorage.cartList = cartListString;
 };
-
 // const getLocalCartList = () => {
 //     // { shopId: {shopName:'', productList:{ productId: {} }}}
 //     return JSON.parse(localStorage.cartList) || {};
 // };
-
 export default createStore({
     state: {
         cartList: {},
@@ -87,6 +85,9 @@ export default createStore({
                 }
             }
             // setLocalCartList(state);
+        },
+        clearCartData(state, shopId) {
+            state.cartList[shopId].productList = {};
         },
     },
 });

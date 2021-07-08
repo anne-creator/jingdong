@@ -28,6 +28,7 @@ export const useToastEffect = () => {
 <style lang="scss" scoped>
 @import "../style/index.scss";
 .toast {
+    z-index: 3;
     position: fixed;
     left: 50%;
     top: 50%;

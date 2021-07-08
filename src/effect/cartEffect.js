@@ -31,5 +31,38 @@ export const useCommonCartEffect = (shopId) => {
         const productList = cartList[shopId]?.productList || "";
         return productList;
     });
-    return { productList, shopName, cartList, changeCartItemInfo };
+    const calculations = computed(() => {
+        const productList = cartList[shopId]?.productList || "";
+        const result = { total: 0, price: 0, allChecked: true };
+        if (productList) {
+            for (let i in productList) {
+                const product = productList[i];
+                result.total += product.count;
+            }
+        }
+        if (productList) {
+            for (let i in productList) {
+                const product = productList[i];
+                if (product.check) {
+                    result.price += product.count * product.price;
+                }
+            }
+            result.price = result.price.toFixed(2);
+        }
+        if (productList) {
+            for (let key in productList) {
+                if (productList[key].count > 0 && !productList[key].check) {
+                    result.allChecked = false;
+                }
+            }
+        }
+        return result;
+    });
+    return {
+        productList,
+        shopName,
+        cartList,
+        changeCartItemInfo,
+        calculations,
+    };
 };
