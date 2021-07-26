@@ -25,7 +25,6 @@ export default createStore({
         //     },
         //  },
         // },
-        // cartList: {},
     },
     mutations: {
         changeCartItemInfo(state, payload) {

@@ -24,7 +24,6 @@ const useNearbyEffect = () => {
         const result = await get("/api/shop/hot-list");
         if (result?.errno === 0 && result?.data?.length) {
             nearbyList.value = result.data;
-            // console.log(nearbyList.value);
         }
     };
     return { nearbyList, getNearbyList };
@@ -44,6 +43,7 @@ export default {
 @import "//at.alicdn.com/t/font_2593379_4q1e2oi4ln5.css";
 @import "../../style/variable.scss";
 .nearby {
+    // background-color: red;
     display: flex;
     flex-direction: column;
     color: $content-font-color;

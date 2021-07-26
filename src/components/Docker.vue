@@ -3,7 +3,10 @@
         <div
             v-for="(item, index) in dockerList"
             :key="index"
-            :class="{ docker__item: true, 'docker__item--active': index === 0 }"
+            :class="{
+                docker__item: true,
+                'docker__item--active': index === currentIndex,
+            }"
         >
             <router-link :to="item.to" class="docker__item">
                 <div class="docker__icon iconfont" :class="item.icon"></div>
@@ -15,23 +18,36 @@
 <script>
 export default {
     name: "Docker",
+    props: ["currentIndex"],
     setup() {
         const dockerList = [
-            { icon: "icon-home-fill", text: "home", to: { name: "Home" } },
+            {
+                icon: "icon-home-fill",
+                text: "home",
+                to: { name: "Home" },
+            },
             {
                 icon: "icon-cart-full-fill",
                 text: "Cart",
                 to: { name: "CartList" },
             },
-            { icon: "icon-order-fill", text: "Order", to: { name: "Home" } },
-            { icon: "icon-account-fill", text: "Me", to: { name: "Home" } },
+            {
+                icon: "icon-order-fill",
+                text: "Order",
+                to: { name: "OrderList" },
+            },
+            {
+                icon: "icon-account-fill",
+                text: "Me",
+                to: { name: "Home" },
+            },
         ];
         return { dockerList };
     },
 };
 </script>
 <style lang="scss" scoped>
-@import "../../style/index.scss";
+@import "../style/index.scss";
 
 .docker {
     font-family: $roboto;
@@ -39,7 +55,7 @@ export default {
     justify-content: center;
     box-sizing: border-box;
     padding: 0 1.8rem;
-    position: absolute;
+    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;

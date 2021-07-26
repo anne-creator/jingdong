@@ -46,52 +46,69 @@ import { post } from "../../utils/request";
 import Toast, { useToastEffect } from "../../components/Toast";
 import { useStore } from "vuex";
 import { ref } from "vue";
+const useMakeOrderEffect = (shopId, shopName, productList) => {
+    const router = useRouter();
+    const { useToast } = useToastEffect();
+    const store = useStore();
+    const handleConfirmOrder = async (isCanceled) => {
+        // get productList
+        const products = [];
+        for (let item in productList.value) {
+            const product = productList.value[item];
+            products.push({
+                id: parseInt(product._id, 10),
+                num: product.count,
+            });
+        }
+        // get api usign get method with params: addressID, shpId, shopname, isCanceled, and products
+        try {
+            const result = await post("/api/order", {
+                addressId: 1,
+                shopId,
+                shopName: shopName.value,
+                isCanceled,
+                products,
+            });
+            // if sucessed, jump to home
+            if (result?.errno === 0) {
+                store.commit("clearCartData", shopId);
+                router.push({ name: "OrderList" });
+            } else {
+                useToast("Failed to connect");
+            }
+        } catch (e) {
+            useToast("Failed creating order");
+        }
+    };
+    return { handleConfirmOrder };
+};
+const useShowMaskEffect = () => {
+    const { showToast, toastMessage } = useToastEffect();
+    const showConfirm = ref(false);
+    const handleShowConfirmChange = (status) => {
+        showConfirm.value = status;
+    };
+    return { showToast, toastMessage, handleShowConfirmChange, showConfirm };
+};
 
 export default {
     name: "Order",
     components: { Toast },
     setup() {
         const route = useRoute();
-        const router = useRouter();
-        const shopId = route.params.id;
-        const { productList, shopName, calculations } =
-            useCommonCartEffect(shopId);
-        const { useToast, showToast, toastMessage } = useToastEffect();
-        const store = useStore();
-        const handleConfirmOrder = async (isCanceled) => {
-            // get productList
-            const products = [];
-            for (let item in productList.value) {
-                const product = productList.value[item];
-                products.push({
-                    id: parseInt(product._id, 10),
-                    num: product.count,
-                });
-            }
-            // get api usign get method with params: addressID, shpId, shopname, isCanceled, and products
-            try {
-                const result = await post("/api/order", {
-                    addressId: 1,
-                    shopId,
-                    shopName: shopName.value,
-                    isCanceled,
-                    products,
-                });
-                // if sucessed, jump to home
-                if (result?.errno === 0) {
-                    store.commit("clearCartData", shopId);
-                    router.push({ name: "Home" });
-                } else {
-                    useToast("Failed to connect");
-                }
-            } catch (e) {
-                useToast("Failed creating order");
-            }
-        };
-        const showConfirm = ref(false);
-        const handleShowConfirmChange = (status) => {
-            showConfirm.value = status;
-        };
+        const shopId = parseInt(route.params.id, 10);
+        const { calculations, shopName, productList } = useCommonCartEffect();
+        const { handleConfirmOrder } = useMakeOrderEffect(
+            shopId,
+            shopName,
+            productList
+        );
+        const {
+            showToast,
+            toastMessage,
+            handleShowConfirmChange,
+            showConfirm,
+        } = useShowMaskEffect();
         return {
             calculations,
             handleConfirmOrder,

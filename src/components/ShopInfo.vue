@@ -9,12 +9,14 @@
         >
             <div class="shop__content__title">{{ item.name }}</div>
             <div class="shop__content__tags">
-                <span class="shop__content__tag">月售: {{ item.sales }} </span>
                 <span class="shop__content__tag"
-                    >起送 {{ item.expressLimit }}
+                    >Sales: {{ item.sales }} &nbsp;
                 </span>
                 <span class="shop__content__tag"
-                    >基础运费: {{ item.expressPrice }}
+                    >Lowest delivery: {{ item.expressLimit }} &nbsp;
+                </span>
+                <span class="shop__content__tag"
+                    >Shipping: {{ item.shippingexpressPrice }} &nbsp;
                 </span>
             </div>
             <div class="shop__highlight">{{ item.slogan }}</div>
@@ -24,7 +26,7 @@
 <script>
 export default {
     name: "ShopInfo",
-    props: ["item", "hideBorder"],
+    props: [" ", "hideBorder"],
 };
 </script>
 <style lang="scss" scoped>

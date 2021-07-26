@@ -120,7 +120,7 @@
                     >&yen; {{ calculations.price }}</span
                 >
             </div>
-            <div class="check__btn">
+            <div class="check__btn" v-show="calculations.total">
                 <router-link :to="{ path: `/orderConfirmation/${shopId}` }">
                     Check Out
                 </router-link>

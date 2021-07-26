@@ -33,8 +33,7 @@ export default {
     setup() {
         const route = useRoute();
         const shopId = route.params.id;
-        const { cartList, shopName, productList } = useCommonCartEffect(shopId);
-        console.log(cartList);
+        const { shopName, productList } = useCommonCartEffect(shopId);
         return { productList, shopName };
     },
 };

@@ -17,12 +17,14 @@
                     <h4 class="product__item__title">
                         {{ item.name }}
                     </h4>
-                    <p class="product__item__sales">月售{{ item.sales }}件</p>
+                    <p class="product__item__sales">
+                        Monthly sales: {{ item.sales }}
+                    </p>
                     <p class="product__item__price">
-                        <span class="product__item__yen">&yen;</span
+                        <span class="product__item__yen">&#36;</span
                         >{{ item.price }}
                         <span class="product__item__origin"
-                            >&yen;{{ item.oldPrice }}</span
+                            >&#36;{{ item.oldPrice }}</span
                         >
                     </p>
                 </div>
@@ -74,9 +76,9 @@ import { useCommonCartEffect } from "../../effect/cartEffect";
 // /api/shop/${shopId}/products
 
 const categories = [
-    { name: "全部商品", tab: "all" },
-    { name: "秒杀", tab: "seckill" },
-    { name: "新鲜水果", tab: "fruit" },
+    { name: "All", tab: "all" },
+    { name: "For Dog", tab: "dog" },
+    { name: "For Cat", tab: "cat" },
 ];
 
 const useTabEffect = () => {
@@ -99,6 +101,7 @@ const useContentListEffect = (curTab, shopId) => {
         if (result?.errno === 0 && result?.data.length) {
             // store content data to list and show the list on the page using v-for
             content.list = result.data;
+            console.log(result.data);
         }
     };
     watchEffect(() => {

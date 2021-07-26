@@ -47,21 +47,20 @@ const routes = [
         component: () =>
             import(/* webpackChunkName: "Cart" */ "../views/cartList/CartList"),
     },
-    // {
-    //     // 跳到对应id的页面
-    //     path: "/orderConfirmation/:id",
-    //     name: "OrderConfirmation",
-    //     component: () =>
-    //         import(
-    //             /* webpackChunkName: "OrderConfirmation" */ "../views/orderConfirmation/OrderConfirmation"
-    //         ),
-    // },
     {
         path: "/orderConfirmation/:id",
         name: "OrderConfirmation",
         component: () =>
             import(
                 /* webpackChunkName: "orderConfirmation" */ "../views/orderConfirmation/OrderConfirmation"
+            ),
+    },
+    {
+        path: "/orderList/",
+        name: "OrderList",
+        component: () =>
+            import(
+                /* webpackChunkName: "orderConfirmation" */ "../views/orderList/OrderList"
             ),
     },
 ];

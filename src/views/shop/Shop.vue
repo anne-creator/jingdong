@@ -23,21 +23,23 @@
 import ShopInfo from "../../components/ShopInfo";
 import Content from "./Content";
 import Cart from "./Cart";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { get } from "../../utils/request";
 import { reactive, toRefs } from "vue";
 
 // get current shop infor
 const useShopInfoEffect = () => {
     // console.log(route.name, route.params);// shop {id:1},这个ID是在router里面developer写入的
-    const route = useRoute();
+    // const route = useRoute();
     const data = reactive({ item: {} });
     // console.log(route.params.id);
     const getItemData = async () => {
-        const result = await get(`api/shop/:${route.params.id}`);
+        // ${route.params.id}
+        const result = await get(`api/shop/1`);
         if (result?.errno === 0 && result?.data) {
             // result.data为api自带的结构中shop需要的信息。
             data.item = result.data;
+            console.log(result);
         }
     };
     const { item } = toRefs(data);
